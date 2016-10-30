@@ -1,0 +1,59 @@
+﻿<Window
+        x:Class="WPF_Grafiki.MainWindow"   
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Model="clr-namespace:WPF_Grafiki.Model"
+        xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit" 
+        DataContext="{DynamicResource Model}"     
+        Title="График F(x)" Height="600" Width="1366">
+    <!--Поключаю ресурсы-->
+    <Window.Resources>
+        <Model:SampleModel x:Key="Model"/>
+        <RoutedCommand x:Key="Command"/>
+    </Window.Resources>
+    <!--Подключаю команды-->
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource Command}" Executed="CommandBinding_Executed"/>
+    </Window.CommandBindings>
+    <!--Видимая область-->
+
+    <Grid ShowGridLines="True">
+        <!--Разметка Grid-a окна-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition />
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="40"/>
+        </Grid.ColumnDefinitions>
+        <!--История изменения величин-->
+        <chartingToolkit:Chart Grid.Row="1" Grid.Column="1" Background="Black" Foreground="WhiteSmoke">
+            <chartingToolkit:LineSeries  ItemsSource="{Binding Path=Data}" DependentValuePath="Value" IndependentValuePath="Name" Foreground="Red" Title="Cos(x)" Background="Red">
+                <!--Настройка кривой графика-->
+                <chartingToolkit:LineSeries.DataPointStyle>
+                    <Style TargetType="chartingToolkit:LineDataPoint">
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="Background" Value="Red"/>
+                        <Setter Property="Height" Value="2"/>
+                        <Setter Property="Width" Value="2"/>
+                        <Setter Property="Opacity" Value="1" />
+                    </Style>
+                </chartingToolkit:LineSeries.DataPointStyle>
+            </chartingToolkit:LineSeries>
+            <!--Настройка осей-->
+            <chartingToolkit:Chart.Axes>
+                <chartingToolkit:LinearAxis Orientation="Y" Maximum="1.5" Minimum="-1.5" ShowGridLines="True"/>
+                <chartingToolkit:LinearAxis Orientation="X" Minimum="0" Maximum="4" ShowGridLines="True"/>
+
+            </chartingToolkit:Chart.Axes>
+        </chartingToolkit:Chart>
+        <!--Мгновенные значения-->
+        <chartingToolkit:Chart Grid.Row="1" Grid.Column="0" Background="Black" Foreground="WhiteSmoke" >
+            <chartingToolkit:BarSeries>
+            </chartingToolkit:BarSeries>
+        </chartingToolkit:Chart>
+    </Grid>
+</Window>
